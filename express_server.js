@@ -5,7 +5,7 @@ app.set("view engine", "ejs");
 
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
+  b2xVn2 : "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
@@ -50,9 +50,17 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  var short = req.params.shortURL;
+  let longURL = urlDatabase[short];
+  res.redirect(longURL);
+});
+
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  let url = generateRandomString();
+  let result = req.body.longURL;
+  urlDatabase[url] = result;
+  res.redirect("/urls/");
 });
 
 function generateRandomString() {
@@ -66,4 +74,3 @@ function generateRandomString() {
   }
   return result;
 }
-generateRandomString() 
