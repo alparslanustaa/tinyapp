@@ -92,10 +92,11 @@ app.post("/urls/:id", (req, res) => {
 });
 
 
+
 function generateRandomString() {
   const randomChars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const result = "";
+  let result = "";
   for (let i = 0; i < 6; i++) {
     result += randomChars.charAt(
       Math.floor(Math.random() * randomChars.length)
