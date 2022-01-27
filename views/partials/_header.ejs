@@ -20,13 +20,10 @@
         </div>
       </form>
         <% } else{ %>  
-          <form class="form-inline" action="/login" method="POST">
-            <div class="form-group mb-2" >
-              <label for="username">Enter A Username:</label>
-              <input class="form-control" type="text" name="username" placeholder="Enter your username here" style="width: 300px; margin: 1em">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
+          <div>
+            <a href="/login">Login</a>
+            <a href="/register">register</a>
+          </div>
   
           <% } %>
   </nav>
