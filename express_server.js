@@ -34,6 +34,15 @@ const emailExists = (email) => {
   return false;
 };
 
+function getUserByEmail(email, database) {
+  for (let key in database) {
+    if (database[key].email === email) {
+      return database[key];
+    }
+  }
+  return undefined;
+}
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
@@ -130,7 +139,7 @@ app.post("/login", (req, res) => {
   if (users[userId].password !== password) {
     return res.status(403).send("Password was not found in the data base!!!")
   }
-  res.cookie("user_id",userId);
+  res.cookie("user_id", userId);
   res.redirect("/urls/");
 });
 
@@ -150,12 +159,13 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
   if (email === '' || password === '') {
     return res.status(400).send("email can't be empty!");
+  } else if (getUserByEmail(email, users)) {
+    res.status(400).send("user is already in the system, go to login.");
+    console.log(user);
+    users[user.id] = user
+    res.cookie("user_id", user.id);
+    res.redirect("/urls")
   }
-
-  console.log(user);
-  users[user.id] = user
-  res.cookie("user_id", user.id);
-  res.redirect("/urls")
 });
 
 
