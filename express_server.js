@@ -161,11 +161,12 @@ app.post("/register", (req, res) => {
     return res.status(400).send("email can't be empty!");
   } else if (getUserByEmail(email, users)) {
     res.status(400).send("user is already in the system, go to login.");
+  }
     console.log(user);
     users[user.id] = user
     res.cookie("user_id", user.id);
     res.redirect("/urls")
-  }
+  
 });
 
 
