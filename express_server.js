@@ -30,8 +30,14 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
+app.get("/login",(req, res) => {
+  const templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
+  res.render("urls_login", templateVars);
+});
+
 app.get("/register", (req, res) => {
-  res.render("urls_register");
+  const templateVars = { urls: urlDatabase, user: users[req.cookies.user_id] };
+  res.render("urls_register", templateVars);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -122,6 +128,12 @@ console.log(req.body)
     email: req.body.email,
     password: req.body.password
   }
+const email = req.body.email;
+const password = req.body.password;
+  if (email === '' || password === '') {
+    return res.status(400).send("email can't be empty!");
+  }
+
   console.log(user);
   users[user.id] = user
   res.cookie("user_id", user.id);
