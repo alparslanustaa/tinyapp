@@ -7,15 +7,15 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 const cookieSession = require('cookie-session');
 app.set("view engine", "ejs");
-// const cookieParser = require("cookie-parser");
-// app.use(cookieParser());
+
 
 app.use(cookieSession({   name: 'session',   
 keys: ["/* secret keys */"],  
   // Cookie Options   
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours 
+  maxAge: 24 * 60 * 60 * 1000  
 }))
 
+//UserS 
 const users = {
   "userRandomID": {
     id: "userRandomID",
@@ -29,6 +29,8 @@ const users = {
   }
 }
 
+//User ID database
+
 const urlDatabase = {
   b6UTxQ: {
     longURL: "https://www.tsn.ca",
@@ -40,7 +42,7 @@ const urlDatabase = {
   }
 };
 
-
+// function check email to user email input
 const emailExists = (email) => {
   for (const user in users) {
     if (email === users[user].email) {
@@ -49,19 +51,13 @@ const emailExists = (email) => {
   }
   return false;
 };
-
-// function getUserByEmail(email, database) {
-//   for (let key in database) {
-//     if (database[key].email === email) {
-//       return database[key];
-//     }
-//   }
-//   return undefined;
-// }
-
+//Port listen
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+
+/////GET ROUTES!
 
 app.get("/login", (req, res) => {
   const templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
@@ -118,6 +114,7 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+//////POST ROUTES!
 
 app.post("/urls", (req, res) => {
   if (!req.session.user_id) {
@@ -134,11 +131,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  // for (let url in urlDatabase) {
-  //   if (urlDatabase[url].userID !== req.session.user_id) {
-  //     return res.status(403).send('You are not authorized for this action')
-  //   }
-  // }
+ 
   const shortURL = req.params.shortURL;
   if (urlDatabase[shortURL].userID !== req.session.user_id) {
     return res.status(403).send('You are not authorized for this action')
@@ -149,11 +142,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post('/urls/:shortURL/edit', (req, res) => {
 
-  // for (let url in urlDatabase) {
-  //   if (urlDatabase[url].userID !== req.session.user_id) {
-  //     return res.status(403).send('You are not authorized for this action')
-  //   }
-  // }
+  
   const shortURL = req.params.shortURL;
   if (urlDatabase[shortURL].userID !== req.session.user_id) {
     return res.status(403).send('You are not authorized for this action')
@@ -170,6 +159,7 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls/");
 });
 
+//LOGIN PAGE ERRORS & FUNCTION USED & PASSWORD HASSING
 app.post("/login", (req, res) => {
   console.log(req.body)
   const email = req.body.email;
@@ -193,6 +183,7 @@ app.post("/logout", (req, res) => {
   res.redirect('/urls')
 });
 
+// REGISTER PAGE & HASSING THE PASS
 app.post("/register", (req, res) => {
   console.log(req.body)
   const user = {
@@ -207,14 +198,13 @@ app.post("/register", (req, res) => {
   } else if (getUserByEmail(email, users)) {
     res.status(400).send("user is already in the system, go to login.");
   }
-
-  // console.log(user);
   users[user.id] = user
   req.session.user_id = user.id;
   res.redirect("/urls")
 
 });
 
+//URLS DATABASE FOUNCTION TO COMPARE ID TO DATABASE ID
 function urlsForUser(userID) {
   const loggedInUserUrl = {};
   for (let url in urlDatabase) {
@@ -225,6 +215,7 @@ function urlsForUser(userID) {
   return loggedInUserUrl;
 }
 
+//GENERATING RANDOM CHAR
 function generateRandomString() {
   const randomChars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
