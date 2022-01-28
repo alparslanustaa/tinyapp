@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-const {getUserByEmail} = require('./helpers');
+const { getUserByEmail } = require('./helpers');
 const bcrypt = require('bcryptjs');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -9,10 +9,11 @@ const cookieSession = require('cookie-session');
 app.set("view engine", "ejs");
 
 
-app.use(cookieSession({   name: 'session',   
-keys: ["/* secret keys */"],  
+app.use(cookieSession({
+  name: 'session',
+  keys: ["/* secret keys */"],
   // Cookie Options   
-  maxAge: 24 * 60 * 60 * 1000  
+  maxAge: 24 * 60 * 60 * 1000
 }))
 
 //UserS 
@@ -131,7 +132,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
- 
+
   const shortURL = req.params.shortURL;
   if (urlDatabase[shortURL].userID !== req.session.user_id) {
     return res.status(403).send('You are not authorized for this action')
@@ -142,7 +143,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post('/urls/:shortURL/edit', (req, res) => {
 
-  
+
   const shortURL = req.params.shortURL;
   if (urlDatabase[shortURL].userID !== req.session.user_id) {
     return res.status(403).send('You are not authorized for this action')
