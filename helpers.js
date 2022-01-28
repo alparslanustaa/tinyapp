@@ -8,4 +8,5 @@ function getUserByEmail(email, database) {
   return undefined;
 }
 
+
 module.exports = {getUserByEmail};
