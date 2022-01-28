@@ -8,11 +8,22 @@ Tiny app is a full stack program that converts longUrls to Shorter urls by using
   
 
 ## Finished App
+  
+  LOGIN PAGE
 
   !["Screenshot of URLs page"](https://github.com/alparslanustaa/tinyapp/blob/master/docs/Screen%20Shot%202022-01-28%20at%204.02.27%20PM.png?raw=true)
 
-
+  MAIN PAGE
   
+  !["Screenshot of URLs page"](https://github.com/alparslanustaa/tinyapp/blob/master/docs/Screen%20Shot%202022-01-28%20at%204.05.32%20PM.png)
+
+  CREATE PAGE
+
+  !["Screenshot of URLs page"](https://github.com/alparslanustaa/tinyapp/blob/master/docs/Screen%20Shot%202022-01-28%20at%204.05.42%20PM.png?raw=true)
+  
+  EDIT PAGE
+
+  !["Screenshot of URLs page"](https://github.com/alparslanustaa/tinyapp/blob/master/docs/Screen%20Shot%202022-01-28%20at%204.05.54%20PM.png?raw=true)
 
 ## Dependencies
 
