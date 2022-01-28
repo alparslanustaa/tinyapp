@@ -1,11 +1,12 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-app.set("view engine", "ejs");
+const {getUserByEmail} = require('./helpers');
 const bcrypt = require('bcryptjs');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
+app.set("view engine", "ejs");
 // const cookieParser = require("cookie-parser");
 // app.use(cookieParser());
 
@@ -49,14 +50,14 @@ const emailExists = (email) => {
   return false;
 };
 
-function getUserByEmail(email, database) {
-  for (let key in database) {
-    if (database[key].email === email) {
-      return database[key];
-    }
-  }
-  return undefined;
-}
+// function getUserByEmail(email, database) {
+//   for (let key in database) {
+//     if (database[key].email === email) {
+//       return database[key];
+//     }
+//   }
+//   return undefined;
+// }
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
@@ -133,10 +134,14 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  for (let url in urlDatabase) {
-    if (urlDatabase[url].userID !== req.session.user_id) {
-      return res.status(403).send('You are not authorized for this action')
-    }
+  // for (let url in urlDatabase) {
+  //   if (urlDatabase[url].userID !== req.session.user_id) {
+  //     return res.status(403).send('You are not authorized for this action')
+  //   }
+  // }
+  const shortURL = req.params.shortURL;
+  if (urlDatabase[shortURL].userID !== req.session.user_id) {
+    return res.status(403).send('You are not authorized for this action')
   }
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls/");
@@ -144,15 +149,18 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post('/urls/:shortURL/edit', (req, res) => {
 
-  for (let url in urlDatabase) {
-    if (urlDatabase[url].userID !== req.session.user_id) {
-      return res.status(403).send('You are not authorized for this action')
-    }
-  }
-
+  // for (let url in urlDatabase) {
+  //   if (urlDatabase[url].userID !== req.session.user_id) {
+  //     return res.status(403).send('You are not authorized for this action')
+  //   }
+  // }
   const shortURL = req.params.shortURL;
+  if (urlDatabase[shortURL].userID !== req.session.user_id) {
+    return res.status(403).send('You are not authorized for this action')
+
+  }
   urlDatabase[shortURL].longURL = req.body.longURL
-  res.redirect(`/urls/${shortURL}`);
+  res.redirect(`/urls`);
 });
 
 
@@ -176,7 +184,7 @@ app.post("/login", (req, res) => {
   if (!bcrypt.compareSync(password, users[userId].password)) {
     return res.status(403).send("Password was not found in the data base!!!")
   }
-  res.cookie("user_id", userId);
+  req.session.user_id = userId;
   res.redirect("/urls/");
 });
 
