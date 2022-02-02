@@ -97,21 +97,26 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   let short = req.params.shortURL;
-  let longURL = urlDatabase[short];
+  let longURL = urlDatabase[`${short}`].longURL;
   res.redirect(longURL);
 });
 
 app.get("/urls/:id", (req, res) => {
 
   let shortURL = req.params.id;
-  console.log('shortUrl ', urlDatabase[shortURL], shortURL)
-  let longURL = urlDatabase[shortURL].longURL;
+  console.log('shortUrl ', urlDatabase[`${shortURL}`], shortURL)
+  let longURL = urlDatabase[`${shortURL}`].longURL;
+  console.log("long url is",longURL);
   let templateVars = {
     user: users[req.session.user_id],
     shortURL: shortURL,
     longURL: longURL,
   };
   res.render("urls_show", templateVars);
+});
+
+app.get("/", (req,res) => {
+  res.redirect("/urls")
 });
 
 //////POST ROUTES!
